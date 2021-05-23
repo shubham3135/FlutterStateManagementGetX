@@ -10,13 +10,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Dialog',
+      title: 'Bottom Sheet',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Dialog'),
+          title: Text('Bottom Sheet'),
         ),
         body: Center(
           child: Column(
@@ -25,45 +25,39 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  // Get.defaultDialog();
-                  Get.defaultDialog(
-                    title: 'Dialog Title',
-                    titleStyle: TextStyle(fontWeight: FontWeight.bold),
-                    middleText: 'This is middle text',
-                    middleTextStyle: TextStyle(fontWeight: FontWeight.w100),
-                    backgroundColor: Colors.purple,
-                    radius: 0,
-                    //To customize the middle text
-                    content: Row(
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: Text('Data Loading'),
-                        ),
-                      ],
+                  Get.bottomSheet(
+                    Container(
+                      child: Wrap(
+                        children: [
+                          ListTile(
+                            leading: Icon(Icons.wb_sunny_outlined),
+                            title: Text('Light Theme'),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.wb_sunny),
+                            title: Text('Dark Theme'),
+                          ),
+                        ],
+                      ),
                     ),
-                    textCancel: 'Cancel',
-                    cancelTextColor: Colors.white,
-                    textConfirm: 'Confirm',
-                    confirmTextColor: Colors.white,
-                    onConfirm: () {},
-                    onCancel: () {},
-                    buttonColor: Colors.deepOrange,
-                    // cancel: Text('Cancels'),
-                    // confirm: Text('Confirms'),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Text('Action1')),
-                      TextButton(onPressed: () {}, child: Text('Action2')),
-                    ],
-                    // barrierDismissible: false,
+                    // barrierColor: Colors.purpleAccent,
+                    backgroundColor: Colors.white,
+                    isDismissible: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                      // side: BorderSide(
+                      //   color: Colors.black,
+                      //   style: BorderStyle.solid,
+                      //   width: 2,
+                      // ),
+                    ),
+                    enableDrag: false,
                   );
                 },
-                child: Text('Show Dialog'),
+                child: Text('Bottom Sheet'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
