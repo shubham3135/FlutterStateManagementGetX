@@ -10,13 +10,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Snackbar',
+      title: 'Dialog',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Snackbar'),
+          title: Text('Dialog'),
         ),
         body: Center(
           child: Column(
@@ -25,72 +25,45 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  Get.snackbar(
-                    'Snackbar Title', 'This will be Snackbar Message',
-                    snackPosition: SnackPosition.BOTTOM,
-                    // titleText: Text(
-                    //   'Another Title',
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
-                    // messageText: Text(
-                    //   'Another message',
-                    //   style: TextStyle(color: Colors.white),
-                    // ),
-                    // colorText: Colors.red,
-                    backgroundColor: Colors.black,
-                    borderRadius: 0,
-                    margin: EdgeInsets.zero,
-                    // maxWidth: 500,
-                    animationDuration: Duration(milliseconds: 1000),
-                    backgroundGradient:
-                        LinearGradient(colors: [Colors.red, Colors.green]),
-                    // borderColor must not be used without borderWidth
-                    // borderColor: Colors.purple,
-                    // borderWidth: 4,
-                    boxShadows: [
-                      BoxShadow(
-                        color: Colors.yellow,
-                        offset: Offset(30, 50),
-                        spreadRadius: 20,
-                        blurRadius: 8,
-                      )
+                  // Get.defaultDialog();
+                  Get.defaultDialog(
+                    title: 'Dialog Title',
+                    titleStyle: TextStyle(fontWeight: FontWeight.bold),
+                    middleText: 'This is middle text',
+                    middleTextStyle: TextStyle(fontWeight: FontWeight.w100),
+                    backgroundColor: Colors.purple,
+                    radius: 0,
+                    //To customize the middle text
+                    content: Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text('Data Loading'),
+                        ),
+                      ],
+                    ),
+                    textCancel: 'Cancel',
+                    cancelTextColor: Colors.white,
+                    textConfirm: 'Confirm',
+                    confirmTextColor: Colors.white,
+                    onConfirm: () {},
+                    onCancel: () {},
+                    buttonColor: Colors.deepOrange,
+                    // cancel: Text('Cancels'),
+                    // confirm: Text('Confirms'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text('Action1')),
+                      TextButton(onPressed: () {}, child: Text('Action2')),
                     ],
-                    isDismissible: true,
-                    dismissDirection: SnackDismissDirection.HORIZONTAL,
-                    forwardAnimationCurve: Curves.bounceInOut,
-                    reverseAnimationCurve: Curves.bounceInOut,
-                    // duration: Duration(milliseconds: 8000),
-                    icon: Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
-                    shouldIconPulse: false,
-                    // leftBarIndicatorColor: Colors.white,
-                    mainButton: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    onTap: (value) => print('Hii this is shubham'),
-                    overlayBlur: 5,
-                    // overlayColor: Colors.grey,
-                    padding: EdgeInsets.all(50),
-                    showProgressIndicator: true,
-                    progressIndicatorBackgroundColor: Colors.deepOrange,
-                    progressIndicatorValueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.white),
-                    snackbarStatus: (val) {
-                      print(val);
-                    },
-                    // userInputForm: Form(
-                    //     child: Row(
-                    //   children: [Expanded(child: TextField())],
-                    // )),
+                    // barrierDismissible: false,
                   );
                 },
-                child: Text('Show Snackbar'),
+                child: Text('Show Dialog'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
