@@ -32,10 +32,16 @@ class MyApp extends StatelessWidget {
                           ListTile(
                             leading: Icon(Icons.wb_sunny_outlined),
                             title: Text('Light Theme'),
+                            onTap: () {
+                              Get.changeTheme(ThemeData.light());
+                            },
                           ),
                           ListTile(
                             leading: Icon(Icons.wb_sunny),
                             title: Text('Dark Theme'),
+                            onTap: () {
+                              Get.changeTheme(ThemeData.dark());
+                            },
                           ),
                         ],
                       ),
