@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_x/student.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  var count = 0.obs;
-  void increment() {
-    count++;
-  }
+  // var student = Student();
+
+  //For making the entire class observable
+  final student = Student(name: 'shubham', age: 25).obs;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +29,23 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using Obx for state management
+               * Using Obx for state management and custom class
                */
               Obx(() => Text(
-                    'Count Value is $count',
+                    'Name is ${student.value.name}',
                     style: TextStyle(fontSize: 25),
                   )),
               SizedBox(height: 10),
               TextButton(
-                onPressed: increment,
-                child: Text('Increment'),
+                onPressed: () {
+                  // student.name.value = student.name.value.toUpperCase();
+
+                  //If entire class is observable
+                  student.update((student) {
+                    student!.name = student.name.toString().toUpperCase();
+                  });
+                },
+                child: Text('Upper'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
