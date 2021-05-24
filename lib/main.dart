@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_x/home.dart';
+import 'package:get_x/next_screen.dart';
+import 'package:get_x/unknown_route.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,6 +14,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Go to Home',
+      initialRoute: '/',
+      defaultTransition: Transition.zoom,
+      getPages: [
+        GetPage(name: '/', page: () => MyApp()),
+        GetPage(name: '/home', page: () => Home()),
+        // GetPage(
+        //     name: '/nextScreen',
+        //     page: () => NextScreen(),
+        //     transition: Transition.leftToRight),
+        GetPage(
+            name: '/nextScreen/:someValue',
+            page: () => NextScreen(),
+            transition: Transition.leftToRight),
+      ],
+      unknownRoute: GetPage(name: '/notfound', page: () => UnknownRoute()),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -25,25 +42,16 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextButton(
-                onPressed: () async {
-                  // Get.to(
-                  //   Home(),
-                  //   fullscreenDialog: true,
-                  //   transition: Transition.zoom,
-                  //   duration: Duration(milliseconds: 4000),
-                  //   curve: Curves.bounceInOut,
-                  //   arguments: 'Data from main',
-                  // );
+                onPressed: () {
+                  Get.toNamed('/home');
 
-                  //Go to home screen but no option to return to previous screen
-                  // Get.off(Home());
+                  //if name is not found unknown route is opened
+                  // Get.toNamed('/x');
 
-                  //Go to home screen and previous screens/routes
-                  // Get.offAll(Home());
-
-                  // receiving data back from home screen
-                  var data = await Get.to(Home());
-                  print('The Received data is $data');
+                  // Get.offNamed('/home');
+                  // Get.offAllNamed('/home');
+                  // Get.toNamed(
+                  //     '/home?channel=Ripples Code&content=Flutter GetX');
                 },
                 child: Text('Go to Home'),
                 style: TextButton.styleFrom(

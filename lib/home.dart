@@ -22,7 +22,9 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 8),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed('/nextScreen/1234');
+              },
               child: Text('Next Screen'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
@@ -44,10 +46,10 @@ class Home extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            // Text(
-            //   '${Get.arguments}',
-            //   style: TextStyle(color: Colors.green, fontSize: 30),
-            // ),
+            Text(
+              'Channel name is ${Get.parameters['channel']} and content is ${Get.parameters['content']}',
+              style: TextStyle(color: Colors.green, fontSize: 30),
+            ),
           ],
         ),
       ),
