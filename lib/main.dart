@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_x/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,13 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Bottom Sheet',
+      title: 'Go to Home',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Bottom Sheet'),
+          title: Text('Go to Home'),
         ),
         body: Center(
           child: Column(
@@ -24,46 +25,27 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               TextButton(
-                onPressed: () {
-                  Get.bottomSheet(
-                    Container(
-                      child: Wrap(
-                        children: [
-                          ListTile(
-                            leading: Icon(Icons.wb_sunny_outlined),
-                            title: Text('Light Theme'),
-                            onTap: () {
-                              Get.changeTheme(ThemeData.light());
-                            },
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.wb_sunny),
-                            title: Text('Dark Theme'),
-                            onTap: () {
-                              Get.changeTheme(ThemeData.dark());
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    // barrierColor: Colors.purpleAccent,
-                    backgroundColor: Colors.white,
-                    isDismissible: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                      // side: BorderSide(
-                      //   color: Colors.black,
-                      //   style: BorderStyle.solid,
-                      //   width: 2,
-                      // ),
-                    ),
-                    enableDrag: false,
-                  );
+                onPressed: () async {
+                  // Get.to(
+                  //   Home(),
+                  //   fullscreenDialog: true,
+                  //   transition: Transition.zoom,
+                  //   duration: Duration(milliseconds: 4000),
+                  //   curve: Curves.bounceInOut,
+                  //   arguments: 'Data from main',
+                  // );
+
+                  //Go to home screen but no option to return to previous screen
+                  // Get.off(Home());
+
+                  //Go to home screen and previous screens/routes
+                  // Get.offAll(Home());
+
+                  // receiving data back from home screen
+                  var data = await Get.to(Home());
+                  print('The Received data is $data');
                 },
-                child: Text('Bottom Sheet'),
+                child: Text('Go to Home'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
