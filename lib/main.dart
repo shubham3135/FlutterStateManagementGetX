@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_x/messages.dart';
 import 'package:get_x/my_controller.dart';
 
 void main() {
@@ -14,13 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Workers',
+      translations: Messages(),
+      locale: Locale('en', 'US'),
+      fallbackLocale: Locale('en', 'US'),
+      title: 'Internationalization',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Workers'),
+          title: Text('Internationalization'),
         ),
         body: Center(
           child: Column(
@@ -28,27 +32,54 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using Workers
+               * Internationalization
                */
+              Text(
+                'hello'.tr,
+                style: TextStyle(fontSize: 25, color: Colors.purple),
+              ),
+              SizedBox(
+                height: 16,
+              ),
               TextButton(
                 onPressed: () {
-                  myController.increment();
+                  myController.changeLanguage('hi', 'IN');
                 },
-                child: Text('Increment'),
+                child: Text('Hindi'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: TextField(
-                  onChanged: (val) {
-                    myController.increment();
-                  },
+              SizedBox(
+                height: 16,
+              ),
+              TextButton(
+                onPressed: () {
+                  myController.changeLanguage('fr', 'FR');
+                },
+                child: Text('French'),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-              )
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextButton(
+                onPressed: () {
+                  myController.changeLanguage('en', 'US');
+                },
+                child: Text('English'),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+              ),
             ],
           ),
         ),
