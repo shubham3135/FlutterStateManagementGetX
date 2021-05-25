@@ -13,13 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Controller Lifecycle',
+      title: 'Unique Id',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Controller Lifecycle'),
+          title: Text('Unique Id'),
         ),
         body: Center(
           child: Column(
@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
                * Using GetXController Lifecycle methods
                */
               GetBuilder<MyController>(
-                // If instance of onInit and onClose not created at MyController class
-                // initState: (data) => myController.increment(),
-                // dispose: (_) => myController.cleanUpTask(),
+                id: 'txtCount',
                 builder: (controller) {
                   return Text(
                     'The value is ${controller.count}',
@@ -40,12 +38,16 @@ class MyApp extends StatelessWidget {
                   );
                 },
               ),
-              /*SizedBox(height: 10),
+              GetBuilder<MyController>(builder: (controller) {
+                return Text(
+                  'The value is ${controller.count}',
+                  style: TextStyle(fontSize: 25),
+                );
+              }),
+              SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // myController.increment();
-                  // If instance of controller not created at top
-                  Get.find<MyController>().increment();
+                  myController.increment();
                 },
                 child: Text('Increment'),
                 style: TextButton.styleFrom(
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-              ),*/
+              ),
             ],
           ),
         ),
