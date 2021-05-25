@@ -8,7 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // Create the instance of Controller
-  MyController myController = Get.put(MyController());
+  // MyController myController = Get.put(MyController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +27,16 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using GetX controller for state management and separating the ui code
+               * Using GetBuilder controller for state management and separating the ui code
                */
-              GetX<MyController>(
+              GetBuilder<MyController>(
                 // If instance of controller not created at top
-                // init: MyController(),
+                init: MyController(),
                 builder: (controller) {
                   return Text(
-                    'The value is ${myController.count}',
+                    // 'The value is ${myController.count}',
                     // If instance of controller not created at top
-                    // 'The value is ${controller.count}',
+                    'The value is ${controller.count}',
                     style: TextStyle(fontSize: 25),
                   );
                 },
@@ -44,9 +44,9 @@ class MyApp extends StatelessWidget {
               SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  myController.increment();
+                  // myController.increment();
                   // If instance of controller not created at top
-                  // Get.find<MyController>().increment();
+                  Get.find<MyController>().increment();
                 },
                 child: Text('Increment'),
                 style: TextButton.styleFrom(
