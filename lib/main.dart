@@ -27,22 +27,28 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using Obx and GetX controller for state management and custom class separating the ui code
+               * Using GetX controller for state management and separating the ui code
                */
-              Obx(() => Text(
-                    'Name is ${myController.student.value.name}',
+              GetX<MyController>(
+                // If instance of controller not created at top
+                // init: MyController(),
+                builder: (controller) {
+                  return Text(
+                    'The value is ${myController.count}',
+                    // If instance of controller not created at top
+                    // 'The value is ${controller.count}',
                     style: TextStyle(fontSize: 25),
-                  )),
+                  );
+                },
+              ),
               SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // if individual variables are observable
-                  // myController.convertToUpperCase();
-
-                  // if entire class is observable
-                  myController.convertUpperCase();
+                  myController.increment();
+                  // If instance of controller not created at top
+                  // Get.find<MyController>().increment();
                 },
-                child: Text('Upper'),
+                child: Text('Increment'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
