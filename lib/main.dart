@@ -8,18 +8,18 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // Create the instance of Controller
-  // MyController myController = Get.put(MyController());
+  MyController myController = Get.put(MyController());
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'State Management',
+      title: 'Controller Lifecycle',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('State Management'),
+          title: Text('Controller Lifecycle'),
         ),
         body: Center(
           child: Column(
@@ -27,21 +27,20 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using GetBuilder controller for state management and separating the ui code
+               * Using GetXController Lifecycle methods
                */
               GetBuilder<MyController>(
-                // If instance of controller not created at top
-                init: MyController(),
+                // If instance of onInit and onClose not created at MyController class
+                // initState: (data) => myController.increment(),
+                // dispose: (_) => myController.cleanUpTask(),
                 builder: (controller) {
                   return Text(
-                    // 'The value is ${myController.count}',
-                    // If instance of controller not created at top
                     'The value is ${controller.count}',
                     style: TextStyle(fontSize: 25),
                   );
                 },
               ),
-              SizedBox(height: 10),
+              /*SizedBox(height: 10),
               TextButton(
                 onPressed: () {
                   // myController.increment();
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
