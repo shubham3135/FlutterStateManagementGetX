@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_x/my_controller.dart';
@@ -13,13 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Unique Id',
+      title: 'Workers',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Unique Id'),
+          title: Text('Workers'),
         ),
         body: Center(
           child: Column(
@@ -27,24 +28,8 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using GetXController Lifecycle methods
+               * Using Workers
                */
-              GetBuilder<MyController>(
-                id: 'txtCount',
-                builder: (controller) {
-                  return Text(
-                    'The value is ${controller.count}',
-                    style: TextStyle(fontSize: 25),
-                  );
-                },
-              ),
-              GetBuilder<MyController>(builder: (controller) {
-                return Text(
-                  'The value is ${controller.count}',
-                  style: TextStyle(fontSize: 25),
-                );
-              }),
-              SizedBox(height: 10),
               TextButton(
                 onPressed: () {
                   myController.increment();
@@ -56,6 +41,14 @@ class MyApp extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: TextField(
+                  onChanged: (val) {
+                    myController.increment();
+                  },
+                ),
+              )
             ],
           ),
         ),
