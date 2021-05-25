@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_x/student.dart';
+import 'package:get_x/my_controller.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // var student = Student();
-
-  //For making the entire class observable
-  final student = Student(name: 'shubham', age: 25).obs;
+  // Create the instance of Controller
+  MyController myController = Get.put(MyController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +27,20 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Using Obx for state management and custom class
+               * Using Obx and GetX controller for state management and custom class separating the ui code
                */
               Obx(() => Text(
-                    'Name is ${student.value.name}',
+                    'Name is ${myController.student.value.name}',
                     style: TextStyle(fontSize: 25),
                   )),
               SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // student.name.value = student.name.value.toUpperCase();
+                  // if individual variables are observable
+                  // myController.convertToUpperCase();
 
-                  //If entire class is observable
-                  student.update((student) {
-                    student!.name = student.name.toString().toUpperCase();
-                  });
+                  // if entire class is observable
+                  myController.convertUpperCase();
                 },
                 child: Text('Upper'),
                 style: TextButton.styleFrom(
