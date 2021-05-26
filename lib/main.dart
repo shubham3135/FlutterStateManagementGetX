@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                   return Text(
                     // 'The value is ${myController.count}',
                     // If instance of controller not created at top
-                    'The value is ${controller.counter}',
+                    'The value is ${controller.counter ?? 0}',
                     style: TextStyle(fontSize: 25),
                   );
                 },

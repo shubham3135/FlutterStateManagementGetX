@@ -17,5 +17,6 @@ class MyController extends GetxController {
     SharedPreferences prefs = await _prefs;
     counter = ((prefs.getInt('counter') ?? 0));
     super.onInit();
+    update();
   }
 }
