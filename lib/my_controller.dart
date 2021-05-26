@@ -1,9 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyController extends GetxController {
-  void changeLanguage(var param1, var param2) {
-    var locale = Locale(param1, param2);
-    Get.updateLocale(locale);
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  var counter;
+  void incrementCounter() async {
+    SharedPreferences prefs = await _prefs;
+    counter = ((prefs.getInt('counter') ?? 0) + 1);
+    print('Pressed $counter times.');
+    await prefs.setInt('counter', counter);
+    update();
+  }
+
+  @override
+  void onInit() async {
+    SharedPreferences prefs = await _prefs;
+    counter = ((prefs.getInt('counter') ?? 0));
+    super.onInit();
   }
 }

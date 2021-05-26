@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_x/messages.dart';
 import 'package:get_x/my_controller.dart';
 
 void main() {
@@ -9,22 +8,33 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // Create the instance of Controller
-  MyController myController = Get.put(MyController());
-
   @override
   Widget build(BuildContext context) {
+    // My Controller instance will be created even if it is not used
+    // tag will be used to find the instance with tag name
+    // Controller disposed when it is not used
+    // but if permanent is true the instance will be alive throughout the app
+    // MyController myController = Get.put(MyController(), tag: 'instance1', permanent: true);
+
+    //Instance will be created when it is used
+    //It is similar to 'permanent', the difference is that the instance
+    //is discarded when is not being used,
+    //but when it's use is needed again, Get will recreate the instance
+    // Get.lazyPut(() => MyController(), tag: 'instance1', fenix: true);
+
+    Get.putAsync<MyController>(() async => await MyController());
+
+    //Here permanent will be true by default and isSingleton is false
+    // Get.create<MyController>(() => MyController());
+
     return GetMaterialApp(
-      translations: Messages(),
-      locale: Locale('en', 'US'),
-      fallbackLocale: Locale('en', 'US'),
-      title: 'Internationalization',
+      title: 'Dependency Injection',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Internationalization'),
+          title: Text('Dependency Injection'),
         ),
         body: Center(
           child: Column(
@@ -32,48 +42,33 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * Internationalization
+               * Dependency Injection
                */
-              Text(
-                'hello'.tr,
-                style: TextStyle(fontSize: 25, color: Colors.purple),
-              ),
-              SizedBox(
-                height: 16,
+              GetBuilder<MyController>(
+                // If instance of controller not created at top
+                init: MyController(),
+                builder: (controller) {
+                  return Text(
+                    // 'The value is ${myController.count}',
+                    // If instance of controller not created at top
+                    'The value is ${controller.counter}',
+                    style: TextStyle(fontSize: 25),
+                  );
+                },
               ),
               TextButton(
                 onPressed: () {
-                  myController.changeLanguage('hi', 'IN');
+                  //Instance will be created with tag
+                  // Get.find<MyController>(tag: 'instance');
+
+                  //Find instance
+                  // Get.find<MyController>();
+                  Get.find<MyController>().incrementCounter();
+
+                  //Find instance with tag
+                  // Get.find<MyController>(tag: 'instance1');
                 },
-                child: Text('Hindi'),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              TextButton(
-                onPressed: () {
-                  myController.changeLanguage('fr', 'FR');
-                },
-                child: Text('French'),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                ),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              TextButton(
-                onPressed: () {
-                  myController.changeLanguage('en', 'US');
-                },
-                child: Text('English'),
+                child: Text('Click Me'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
