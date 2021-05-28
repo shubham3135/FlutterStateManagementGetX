@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_x/home_controller.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<HomeController>(() => HomeController());
     return Scaffold(
       backgroundColor: Colors.greenAccent,
       appBar: AppBar(
@@ -16,16 +16,18 @@ class Home extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'This is Home Screen',
-              style: TextStyle(color: Colors.purpleAccent, fontSize: 30),
+            Obx(
+              () => Text(
+                'The value is ${Get.find<HomeController>().count}',
+                style: TextStyle(color: Colors.purpleAccent, fontSize: 30),
+              ),
             ),
             SizedBox(height: 8),
             TextButton(
               onPressed: () {
-                Get.toNamed('/nextScreen/1234');
+                Get.find<HomeController>().increment();
               },
-              child: Text('Next Screen'),
+              child: Text('Increment'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 backgroundColor: Colors.lightBlue,
@@ -35,20 +37,14 @@ class Home extends StatelessWidget {
             SizedBox(height: 8),
             TextButton(
               onPressed: () {
-                // Get.back();
-                Get.back(result: 'This is from Home Screen');
+                Get.back();
               },
-              child: Text('Back to Main'),
+              child: Text('Back'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 backgroundColor: Colors.lightBlue,
                 padding: EdgeInsets.symmetric(horizontal: 20),
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Channel name is ${Get.parameters['channel']} and content is ${Get.parameters['content']}',
-              style: TextStyle(color: Colors.green, fontSize: 30),
             ),
           ],
         ),

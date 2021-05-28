@@ -1,30 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_x/service.dart';
+import 'package:get_x/home.dart';
+import 'package:get_x/my_controller.dart';
+import 'package:get_x/myapp_controller_binding.dart';
 
-Future<void> main() async {
-  await initServices();
+import 'home_controller_binding.dart';
+
+void main() {
+  MyAppControllerBinding().dependencies();
   runApp(MyApp());
-}
-
-Future<void> initServices() async {
-  print('starting services...');
-  await Get.putAsync<Service>(() async => await Service());
-  print('All services started...');
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'GetX Service',
+      // initialBinding: AllControllerBinding(),
+      title: 'GetX Binding',
+
+      // If binding applied at route level
+      // getPages: [
+      //   GetPage(
+      //     name: '/home',
+      //     page: () => Home(),
+      //     binding: HomeControllerBinding(),
+      //   )
+      // ],
+
+      //Binding Builder (If we don't want to use separate binding class)
+      getPages: [
+        GetPage(
+          name: '/home',
+          page: () => Home(),
+          binding: BindingsBuilder(() => {
+                Get.lazyPut<HomeControllerBinding>(
+                  () => HomeControllerBinding(),
+                )
+              }),
+        ),
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('GetX Service'),
+          title: Text('GetX Binding'),
         ),
         body: Center(
           child: Column(
@@ -32,17 +53,36 @@ class MyApp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /**
-               * GetX Service
+               * GetX Binding
                */
-              Text(
-                'The value is ${Get.find<Service>().counter ?? 0}',
-                style: TextStyle(fontSize: 25),
+              Obx(() => Text(
+                    'The value is ${Get.find<MyController>().count}',
+                    style: TextStyle(fontSize: 25),
+                  )),
+              TextButton(
+                onPressed: () {
+                  Get.find<MyController>().increment();
+                },
+                child: Text('Increment'),
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               TextButton(
                 onPressed: () {
-                  Get.find<Service>().incrementCounter();
+                  // Get.to(Home());
+                  //For named route
+                  Get.toNamed('/home');
+
+                  //for normal routes
+                  // Get.to(Home(), binding: HomeControllerBinding());
                 },
-                child: Text('Increment'),
+                child: Text('Home'),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
                   backgroundColor: Colors.blue,
