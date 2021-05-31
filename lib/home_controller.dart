@@ -1,59 +1,75 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:local_auth/auth_strings.dart';
+import 'package:local_auth/local_auth.dart';
 
 class HomeController extends GetxController {
-  var selectedImagePath = ''.obs;
-  var selectedImageSize = ''.obs;
+  var _localAuth = LocalAuthentication();
+  var hasFingerPrintLock = false.obs;
+  var hasFaceLock = false.obs;
+  var isUserAuthenticated = false.obs;
 
-  //crop code
-  var cropImagePath = ''.obs;
-  var cropImageSize = ''.obs;
-
-  //Compress code
-  var compressImagePath = ''.obs;
-  var compressImageSize = ''.obs;
-
-  void getImage(ImageSource imageSource) async {
-    final pickedFile = await ImagePicker().getImage(source: imageSource);
-    if (pickedFile != null) {
-      selectedImagePath.value = pickedFile.path;
-      selectedImageSize.value =
-          ((File(selectedImagePath.value)).lengthSync() / 1024 / 1024)
-                  .toStringAsFixed(2) +
-              ' Mb';
-
-      //Crop
-      final cropImageFile = await ImageCropper.cropImage(
-          sourcePath: selectedImagePath.value,
-          maxWidth: 512,
-          maxHeight: 512,
-          compressFormat: ImageCompressFormat.jpg);
-      cropImagePath.value = cropImageFile!.path;
-      cropImageSize.value =
-          ((File(cropImagePath.value)).lengthSync() / 1024).toStringAsFixed(2) +
-              ' Kb';
-
-      //Compress
-      final dir = await Directory.systemTemp;
-      final targetPath = dir.absolute.path + '/temp.jpg';
-      var compressedFile = await FlutterImageCompress.compressAndGetFile(
-          cropImagePath.value, targetPath,
-          quality: 90);
-      compressImagePath.value = compressedFile!.path;
-      compressImageSize.value =
-          ((File(compressImagePath.value)).lengthSync() / 1024)
-                  .toStringAsFixed(2) +
-              ' Kb';
+  void _getAllBiometrics() async {
+    bool hasLocalAuthentication = await _localAuth.canCheckBiometrics;
+    if (hasLocalAuthentication) {
+      List<BiometricType> availableBiometrics =
+          await _localAuth.getAvailableBiometrics();
+      hasFaceLock.value = availableBiometrics.contains(BiometricType.face);
+      hasFingerPrintLock.value =
+          availableBiometrics.contains(BiometricType.fingerprint);
     } else {
-      Get.snackbar('Error', 'No image Selected',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      showSnackBar(
+          title: 'Error',
+          message: 'Local Authentication not available',
+          backgroundColor: Colors.red);
+    }
+  }
+
+  void showSnackBar(
+      {required String title,
+      required String message,
+      required Color backgroundColor}) {
+    Get.snackbar(title, message,
+        backgroundColor: backgroundColor,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM);
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _getAllBiometrics();
+  }
+
+  void authenticateUser() async {
+    try {
+      var androidMessage = AndroidAuthMessages(
+          cancelButton: 'Cancel',
+          goToSettingsButton: 'settings',
+          goToSettingsDescription: 'Please set up your Fingerprint/Face.',
+          biometricHint: 'Verify your identity');
+      isUserAuthenticated.value = await _localAuth.authenticate(
+        localizedReason: 'Authenticate Yourself',
+        biometricOnly: true,
+        useErrorDialogs: true,
+        stickyAuth: true,
+        androidAuthStrings: androidMessage,
+      );
+
+      if (isUserAuthenticated.value) {
+        showSnackBar(
+            title: 'Success',
+            message: 'You are authenticated',
+            backgroundColor: Colors.green);
+      } else {
+        showSnackBar(
+            title: 'Error',
+            message: 'Authentication Cancelled',
+            backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      showSnackBar(
+          title: 'Error', message: e.toString(), backgroundColor: Colors.red);
     }
   }
 }
