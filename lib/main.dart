@@ -7,17 +7,6 @@ void main() {
   runApp(MyApp());
 }
 
-//GetView
-// =======
-// If we have single controller as a dependency then we can use GetView
-//instead of StatelessWidget and avoid writing Get.find
-
-//GetWidget
-// ========
-//It is similar to GetView with one difference it gives the same instance of
-//Get.find everytime. It becomes very useful when used in combination with
-//Get.create
-
 class MyApp extends GetView<CountController> {
   @override
   Widget build(BuildContext context) {
