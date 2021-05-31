@@ -20,12 +20,12 @@ class HomeView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Obx(() => controller.cropImagePath.value == ''
+              Obx(() => controller.compressImagePath.value == ''
                   ? Text(
                       'Select image from camera/gallery',
                       style: TextStyle(fontSize: 20),
                     )
-                  : Image.file(File(controller.cropImagePath.value))),
+                  : Image.file(File(controller.compressImagePath.value))),
               SizedBox(
                 height: 8,
               ),
