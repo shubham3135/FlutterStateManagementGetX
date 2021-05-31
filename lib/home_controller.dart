@@ -1,75 +1,41 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/auth_strings.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:video_player/video_player.dart';
 
 class HomeController extends GetxController {
-  var _localAuth = LocalAuthentication();
-  var hasFingerPrintLock = false.obs;
-  var hasFaceLock = false.obs;
-  var isUserAuthenticated = false.obs;
-
-  void _getAllBiometrics() async {
-    bool hasLocalAuthentication = await _localAuth.canCheckBiometrics;
-    if (hasLocalAuthentication) {
-      List<BiometricType> availableBiometrics =
-          await _localAuth.getAvailableBiometrics();
-      hasFaceLock.value = availableBiometrics.contains(BiometricType.face);
-      hasFingerPrintLock.value =
-          availableBiometrics.contains(BiometricType.fingerprint);
-    } else {
-      showSnackBar(
-          title: 'Error',
-          message: 'Local Authentication not available',
-          backgroundColor: Colors.red);
-    }
-  }
-
-  void showSnackBar(
-      {required String title,
-      required String message,
-      required Color backgroundColor}) {
-    Get.snackbar(title, message,
-        backgroundColor: backgroundColor,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM);
-  }
+  late VideoPlayerController videoPlayerController;
+  ChewieController? chewieController;
 
   @override
   void onInit() {
     super.onInit();
-    _getAllBiometrics();
+    initializePlayer();
   }
 
-  void authenticateUser() async {
-    try {
-      var androidMessage = AndroidAuthMessages(
-          cancelButton: 'Cancel',
-          goToSettingsButton: 'settings',
-          goToSettingsDescription: 'Please set up your Fingerprint/Face.',
-          biometricHint: 'Verify your identity');
-      isUserAuthenticated.value = await _localAuth.authenticate(
-        localizedReason: 'Authenticate Yourself',
-        biometricOnly: true,
-        useErrorDialogs: true,
-        stickyAuth: true,
-        androidAuthStrings: androidMessage,
-      );
+  @override
+  void onClose() {
+    videoPlayerController.dispose();
+    chewieController!.dispose();
+  }
 
-      if (isUserAuthenticated.value) {
-        showSnackBar(
-            title: 'Success',
-            message: 'You are authenticated',
-            backgroundColor: Colors.green);
-      } else {
-        showSnackBar(
-            title: 'Error',
-            message: 'Authentication Cancelled',
-            backgroundColor: Colors.red);
-      }
-    } catch (e) {
-      showSnackBar(
-          title: 'Error', message: e.toString(), backgroundColor: Colors.red);
-    }
+  Future<void> initializePlayer() async {
+    videoPlayerController = VideoPlayerController.network(
+        'https://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4');
+    await Future.wait([videoPlayerController.initialize()]);
+    chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        autoPlay: true,
+        looping: true,
+        materialProgressColors: ChewieProgressColors(
+            playedColor: Colors.red,
+            handleColor: Colors.cyanAccent,
+            backgroundColor: Colors.yellow,
+            bufferedColor: Colors.lightGreen),
+        placeholder: Container(
+          color: Colors.greenAccent,
+        ),
+        autoInitialize: true);
+    update();
   }
 }
